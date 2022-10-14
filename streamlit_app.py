@@ -44,6 +44,13 @@ streamlit.dataframe(fruits_to_show)
 # Output in a table format using dataframe.
     #streamlit.dataframe(fruityvice_normalized)
 
+
+#Create a repeatable code block (called a function)
+def get_fruityvice_date(this_fruit_choice):
+  fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
+  fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+  return fruityvice_normalized
+  
 #Above old way in new organized way.  
 #New function to display fruitvice api response
 streamlit.header("Fruityvice Fruit Advice!")
@@ -52,9 +59,8 @@ try:
   if not fruit_choice:
     streamlit.error ("Please select a fruit to get information.")
   else:
-    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
-    fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-    streamlit.dataframe(fruityvice_normalized)
+    back_from_function = get_fruityvice_date(fruit_choice)
+    streamlit.dataframe(back_from_function)
       
 except URLError as e:
   streamlit.error()
